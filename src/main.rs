@@ -1,9 +1,12 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(unused_imports)]
+
 #[macro_use]
 extern crate lazy_static;
 
 use std::env;
 use std::fs::{ File };
-use std::io;
 use std::io::{ prelude::*, BufReader };
 use std::path::{ Path };
 
