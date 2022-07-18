@@ -80,19 +80,25 @@ pub fn run(lines: &Vec<String>) -> Vec<Token> {
 fn tokenize_header(line: &String) -> Option<Token> {
     let capture_group = HEADER_REGEX.captures(&line);
     match &capture_group {
-        None => return None,
         Some(group) => {
-            if group.len() <= 2 || group.len() > 4 {
-                return None;
-            }
-        }
-    }
+	    let matches = group
+		.iter()
+		.flatten()
+		.map(|value| value.as_str())
+		.collect::<Vec<_>>();
 
-    let group = &capture_group.unwrap();
-    let header_type = group.get(1).unwrap().as_str().len();
-    let header_text = group.get(2).unwrap().as_str();
-    let token = Token::Header(header_type, Text::new(String::from(header_text)));
-    Some(token)
+	    if let [_, header_type, header_text] = &matches[..] {
+		let header = header_type.len();
+		let text = header_text.to_string();
+
+		let token = Token::Header(header, Text::new(text));
+		return Some(token)
+	    }
+
+	    None
+        },
+	_ => None
+    }
 }
 
 fn tokenize_blockquote() { }
